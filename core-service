@@ -1,0 +1,7 @@
+FROM alpine:latest
+
+WORKDIR /app
+COPY bin/core-service /app/
+EXPOSE 80
+
+CMD ["/app/core-service"]
