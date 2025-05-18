@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  lb:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./frontend:/usr/share/nginx/html
+    depends_on:
+      - core-service
+      - user-service
+    networks:
+      - app-network
+
+  core-service:
+    build: ./core-service
+    networks:
+      - app-network
+    expose:
+      - "80"
+    volumes:
+      - ./core-service/bin:/app/bin
+
+  user-service:
+    build: ./user-service
+    networks:
+      - app-network
+    expose:
+      - "80"
+    volumes:
+      - ./user-service/bin:/app/bin
+
+networks:
+  app-network:
+    driver: bridge
